@@ -24,13 +24,18 @@ class _HomePageState extends State<HomePage>
   late TabController _tabController;
   DateTime? _startTime;
   DateTime? _endTime;
+  final DatabaseService _databaseService = DatabaseService.instance;
 
   @override
   void initState() {
     super.initState();
-
+    deleteData();
     _tabController =
         TabController(length: FoodCategory.values.length, vsync: this);
+  }
+
+  deleteData() async {
+    await _databaseService.deleteAllRows();
   }
 
   @override
@@ -46,9 +51,10 @@ class _HomePageState extends State<HomePage>
 
   List<Widget> getFoodInThisCategory(List<Food> fullMenu) {
     final ResturantProvider = Provider.of<Restaurant>(context, listen: false);
-    final DatabaseService _databaseService = DatabaseService.instance;
+
     return FoodCategory.values.map((category) {
       List<Food> categoryMenu = _filterMenuByCategory(category, fullMenu);
+      String? previousFoodPayload;
       DateTime? lastTime;
       Duration? duration;
       String previousCategory;
@@ -58,24 +64,31 @@ class _HomePageState extends State<HomePage>
           padding: EdgeInsets.zero,
           itemBuilder: (context, index) {
             final food = categoryMenu[index];
+
             FoodCategory foodItem = categoryMenu[index].category;
             String FoodView = foodItem.toString().split('.')[1];
+
             // print(foodItem.toString().split('.')[1]);
 
             _startTime = DateTime.now();
             final formatDate = DateFormat('HH:mm:ss').format(_startTime!);
             String formattedTime = formatDate.toString();
-  
+
             String FoodViewPayload = "$FoodView - $formattedTime";
-            ResturantProvider.FoodDuration.add(FoodViewPayload);
-            print("$FoodView - $formattedTime");
+            if (FoodViewPayload != previousFoodPayload) {
+              ResturantProvider.FoodDuration.add(FoodViewPayload);
+              print("$FoodView - $formattedTime");
+              print(ResturantProvider.foodList);
+            }
+
             // _databaseService.addFoodDuration(FoodViewPayload);
             //storing category timing in map and pushing in local storage.
+            previousFoodPayload = FoodViewPayload;
             return (FoodTile(
                 food: food,
                 onTap: () {
                   print(food.name);
-                 
+
                   final MyMap = Provider.of<Restaurant>(context, listen: false);
 
                   MyMap.FoodCounter(food.name);

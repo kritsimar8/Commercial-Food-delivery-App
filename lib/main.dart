@@ -7,24 +7,27 @@ import 'package:food_ordering_app/pages/home_page.dart';
 import 'package:food_ordering_app/pages/notification_services.dart';
 import 'package:food_ordering_app/pages/testingPage.dart';
 import 'package:food_ordering_app/pages/testingPage2.dart';
+import 'package:food_ordering_app/services/auth/auth_gate.dart';
+import 'package:food_ordering_app/services/auth/login_register.dart';
 import 'package:food_ordering_app/themes/theme_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 
-void main() async {
+  main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
- 
+  
   // runApp(MaterialApp(home: SessionTrackingApp(),));
 
-  // runApp(MultiProvider(providers: [
-  //   ChangeNotifierProvider(create: (context) => ThemeProvider()),
-  //   ChangeNotifierProvider(create: (context) => Restaurant()),
-  // ], child: SessionTrackingApp()));
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) => Restaurant()),
+  ], 
+  child: SessionTrackingApp()));
+  // runApp(MyApp());
 }
 
 @pragma('vm:entry-point')
@@ -138,7 +141,7 @@ class _SessionTrackingAppState extends State<SessionTrackingApp>
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
-        return HomePage();
+        return AuthGate();
       }),
       theme: Provider.of<ThemeProvider>(context).themeData,
     );

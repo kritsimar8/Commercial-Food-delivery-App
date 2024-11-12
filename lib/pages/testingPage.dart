@@ -16,7 +16,7 @@ class _TestingPageState extends State<TestingPage> {
  
   
   final DatabaseService _databaseService = DatabaseService.instance;
-  NotificationServices  notificationServices = NotificationServices();
+  // NotificationServices  notificationServices = NotificationServices();
 
   String? _task = null;
 
@@ -24,18 +24,18 @@ class _TestingPageState extends State<TestingPage> {
  
   
 
-  @override 
-  void initState() {
-    super.initState();
-    notificationServices.requestNotificationPermission();
-    notificationServices.firebaseInit(context);
-    notificationServices.setupInteractMessage(context);
-    notificationServices.getDeviceToken().then((value){
-      print('device token');
-      print(value);
-    });
+  // @override 
+  // void initState() {
+  //   super.initState();
+  //   notificationServices.requestNotificationPermission();
+  //   notificationServices.firebaseInit(context);
+  //   notificationServices.setupInteractMessage(context);
+  //   notificationServices.getDeviceToken().then((value){
+  //     print('device token');
+  //     print(value);
+  //   });
    
-  }
+  // }
 
 
   @override
@@ -46,64 +46,68 @@ class _TestingPageState extends State<TestingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () => _databaseService.getLastId(),
-              child: Text('Click here',
-              style: TextStyle(
-                color: Colors.red
-              ),),
-            )
+          FloatingActionButton(
+            onPressed: () {
+              _databaseService.getTask('1:00');
+            },
+            child: Text('helloji')),
+           GestureDetector(
+            onTap: () async{
+              _databaseService.deleteAllRows();
+            },
+            child: Text('Delete krdo ji'),
+           )
           ],
         ),
       )
 
     );
   }
-  Widget _addTaskButton() {
-    return FloatingActionButton(onPressed: (){
-      showDialog(context: context, builder: (_)=> AlertDialog(
-        title: const Text('add Task'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              onChanged: (value){
-                setState(() {
-                  _task= value;
-                });
-              },
-            ),
-            MaterialButton(onPressed: (){
-              if(_task == null || _task =="") return;
-              // _databaseService.addTask(_task!,_task!);
-              setState(() {
-                _task=null;
-              });
-              Navigator.pop(context);
-            },
-            child: const Text(
-              "Done",
-              style: TextStyle(
-                color: Colors.red
-              ),
-            ),
-            )
-          ],
-        ),
-      ));
-    },
-    child: const Icon(Icons.add),
-    );
-  }
-  Widget _tasksList(){
-    return FutureBuilder(future: _databaseService.getTask(), builder: (context,snapshot){
-      return Container();
-    });
-  }
+//   Widget _addTaskButton() {
+//     return FloatingActionButton(onPressed: (){
+//       showDialog(context: context, builder: (_)=> AlertDialog(
+//         title: const Text('add Task'),
+//         content: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             TextField(
+//               onChanged: (value){
+//                 setState(() {
+//                   _task= value;
+//                 });
+//               },
+//             ),
+//             MaterialButton(onPressed: (){
+//               if(_task == null || _task =="") return;
+//               // _databaseService.addTask(_task!,_task!);
+//               setState(() {
+//                 _task=null;
+//               });
+//               Navigator.pop(context);
+//             },
+//             child: const Text(
+//               "Done",
+//               style: TextStyle(
+//                 color: Colors.red
+//               ),
+//             ),
+//             )
+//           ],
+//         ),
+//       ));
+//     },
+//     child: const Icon(Icons.add),
+//     );
+//   }
+//   Widget _tasksList(){
+//     return FutureBuilder(future: _databaseService.getTask(), builder: (context,snapshot){
+//       return Container();
+//     });
+//   }
+// }
+
+
 }
-
-
-
 
 
 

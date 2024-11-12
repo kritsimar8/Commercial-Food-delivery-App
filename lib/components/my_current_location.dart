@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:food_ordering_app/models/restaurant.dart';
 import 'package:provider/provider.dart';
 
-class MyCurrentLocation extends StatelessWidget{
+class MyCurrentLocation extends StatefulWidget{
    MyCurrentLocation({super.key});
 
+  @override
+  State<MyCurrentLocation> createState() => _MyCurrentLocationState();
+}
+
+class _MyCurrentLocationState extends State<MyCurrentLocation> {
   final TextEditingController textController = TextEditingController();
+
   void openLocationSearchBox(BuildContext context){
     showDialog(
       context:context,
@@ -25,17 +31,15 @@ class MyCurrentLocation extends StatelessWidget{
               String newAddress = textController.text;
               context.read<Restaurant>().updateDeliveryAddress(newAddress);
             Navigator.pop(context);
-            child:const Text('Save');
-            }
+            },
+            child:const Text('Save')
+         
           ),
         ]
       )
     );
 
   }
-
-
-
 
   @override
   Widget build(BuildContext context){
@@ -69,8 +73,4 @@ class MyCurrentLocation extends StatelessWidget{
     )
     );
   }
-
-
-
-
 }

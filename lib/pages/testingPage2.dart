@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 class DatabaseService{
   static Database? _db;
-
+  
   static final DatabaseService instance = DatabaseService._constructor();
 
   final String _TableName = "Food_Sessions";
@@ -160,10 +160,21 @@ class DatabaseService{
       
   }
 
-   getTask() async{
+   getTask(String DurationStart) async{
     final db = await database;
-    
+    // await db.insert(_TableName,
+    // {
+    //   _StartDuration:DurationStart 
+    // },
+    //  conflictAlgorithm: ConflictAlgorithm.replace,
+    // );
+  
     final data = await db.query(_TableName);
     print(data);
+  }
+   deleteAllRows() async{
+    final db = await instance.database;
+    await db.delete('Food_Sessions');
+    print('deleted everything');
   }
 }
